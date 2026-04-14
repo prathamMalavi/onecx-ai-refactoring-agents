@@ -1,0 +1,23 @@
+---
+name: migrate-19
+description: Start or continue an OneCX Angular migration
+agent: migration-orchestrator
+tools: ['agent', 'read', 'search', 'execute', 'web', 'edit', 'vscode', 'todo', 'browser', 'onecx-docs-mcp/*', 'primeng/*', 'npm-sentinel/*', 'search/changes', 'search/codebase', 'search/fileSearch', 'search/usages', 'search/listDirectory' , 'search/searchResults', 'search/textSearch']
+---
+
+## Migration Path
+
+- **Source Angular version**: 18
+- **Target Angular version**: 19
+- **Migration identifier**: angular-18-to-19
+
+## Version-Specific Data File
+
+- **Active data file**: `migration-18-19.instructions.md`
+
+Check if MIGRATION_PROGRESS.md exists in the workspace root.
+
+- If it does NOT exist: run "Start Phase 1" to initialize the migration plan.
+- If it exists: read it, show current status (phase, completed/pending task counts), and ask what to do next.
+
+Available commands: "Continue execution", "Skip~N", "Status", "Validate", "Help"
