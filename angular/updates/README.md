@@ -17,10 +17,14 @@ AI-assisted Angular version migration for OneCX applications.
 ├── instructions/
 │   ├── migration-rules.instructions.md                — core rules (auto-injected into ALL agents)
 │   ├── migration-progress-format.instructions.md      — evidence format (auto-injected on progress file)
-│   ├── migration-custom-user.instructions.md          — YOUR project rules (fill in yourself)
-│   └── migration-18-19.instructions.md                — version-specific data (fill in yourself)
+│   ├── migration-custom-user.instructions.md          — YOUR project rules (can add custom instruction)
+│   └── migration-18-19.instructions.md                — version-specific data & instruction
+│   └── migration-19-20.instructions.md                — version-specific data & instruction
+│   └── migration-20-21.instructions.md                — version-specific data & instruction
 ├── prompts/
-│   └── migrate.prompt.md                              — /migrate quick-start command
+│   └── migrate-19.prompt.md                           — /migrate-19 quick-start command
+│   └── migrate-20.prompt.md                           — /migrate-20 quick-start command
+│   └── migrate-21.prompt.md                           — /migrate-21 quick-start command
 └── templates/
     ├── MIGRATION_PROGRESS.template.md                 — progress file template
     └── tasks.json                                     — VS Code tasks for build/lint/test
