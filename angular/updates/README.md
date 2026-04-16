@@ -1,4 +1,4 @@
-# OneCX Angular Migration Agent — v5
+# OneCX Angular Migration Agent
 
 AI-assisted Angular version migration for OneCX applications.
 
@@ -75,7 +75,7 @@ Repeat until Phase A is complete. Then approve Phase B upgrade, then continue th
 ### Workflow
 
 ```
-User: /migrate  OR  @migration-orchestrator "Start Phase 1"
+User: /migrate-19, /migrate-20, /migrate-21
   │
   ├─ Orchestrator checks branch, routes to Planner
   │   └─ Planner: audits, discovers docs, creates task tree

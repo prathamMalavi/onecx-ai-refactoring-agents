@@ -49,7 +49,7 @@ Active Data File:
 | npm run test baseline | [ ] | STRICT: must pass or STOP. Record coverage %. Fix before proceeding. |
 | TypeScript compatibility check | [ ] | Verify TS version matches target Angular requirements. |
 | Check .vscode/tasks.json | [ ] | Verify npm:build, npm:lint, npm:test exist. Create from template if missing. |
-| Check copilot-instructions.md | [ ] | Tag all Angular 19 specific lines with # [REMOVE-AFTER-MIGRATION]. |
+| Check copilot-instructions.md | [ ] | Tag all Angular <Source> specific lines with # [REMOVE-AFTER-MIGRATION]. |
 | Vulnerability & deprecation scan | [ ] | If NPM MCP available: scan packages. Otherwise: note "manual scan recommended". |
 | Discover OneCX docs | [ ] | Fetch migration index page + all linked pages. Visit EVERY link. |
 | Discover PrimeNG docs | [ ] | If repo uses primeng: fetch migration guide (detect version from package.json). |

@@ -26,12 +26,8 @@ onecx-refactoring-agents/
 ## Folders
 
 ### [angular/](angular/)
-Contains Angular-specific refactoring and migration agents for OneCX microapplications.
+Contains Angular-specific refactoring and migration agents for OneCX Applications.
 
-## Getting Started
-
-Refer to the appropriate tech-stack folder's README for setup, available agents, and usage:
-- **[Angular](angular/)** — for Angular refactoring and migration agents
 
 ## Architecture Principles
 1. **Orchestrator Pattern**: Single user-facing agent coordinates all work
