@@ -4,7 +4,7 @@
 
 ## Overview
 
-This repository contains AI-powered agents designed to automate and streamline refactoring tasks across OneCX microapplications. Using VS Code agents and the GitHub Copilot API, these tools guide developers through complex migrations, version upgrades, and code modernization with minimal manual effort.
+This repository contains the configuration for AI-powered agents designed to automate and streamline refactoring tasks across OneCX applications. Using GitHub Copilot Custom Agents in VSCode, these tools guide developers through complex migrations, version upgrades, and code modernization with minimal manual effort.
 
 ## Repository Structure
 
@@ -17,23 +17,12 @@ onecx-refactoring-agents/
         └── .github/           — Agent configuration and templates
 ```
 
-## Key Features
-- **AI-Assisted Workflows**: Leverages GitHub Copilot agents for intelligent task execution
-- **Modular Architecture**: Clear separation between orchestration, planning, execution, and validation
-- **Auto-Injection System**: Core rules automatically applied to all agent invocations without manual setup
-- **Evidence-Based Progress**: Detailed tracking of all migration tasks with validation at each phase
-
 ## Folders
 
 ### [angular/](angular/)
 Contains Angular-specific refactoring and migration agents for OneCX Applications.
 
 
-## Architecture Principles
-1. **Orchestrator Pattern**: Single user-facing agent coordinates all work
-2. **Subagent Execution**: Specialized agents handle planning, execution, and validation
-3. **Automatic Rule Injection**: Core rules apply to all agents without redundant setup
-5. **Evidence-Driven**: All decisions backed by official documentation and task logs
-
 ## License
 Apache 2.0 — see [LICENSE](LICENSE) for details
+

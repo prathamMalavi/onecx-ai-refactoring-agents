@@ -8,7 +8,6 @@ AI-assisted Angular version migration for OneCX applications.
 
 ```
 .github/
-├── AGENTS.md                                          — always-on project identity
 ├── agents/
 │   ├── migration-orchestrator.agent.md                — coordinator (user-facing)
 │   ├── migration-planner.agent.md                     — discovery & planning (subagent)
@@ -29,6 +28,21 @@ AI-assisted Angular version migration for OneCX applications.
     ├── MIGRATION_PROGRESS.template.md                 — progress file template
     └── tasks.json                                     — VS Code tasks for build/lint/test
 ```
+
+This workspace runs an AI-assisted Angular version migration for OneCX applications.
+
+- **MIGRATION_PROGRESS.md** is the single source of truth for all task state
+- All migration tasks are derived from official documentation — never invented
+- Orchestrator chains executor spawns (one task each) with smart stop conditions
+- Validation order is always: build → lint → test (every task, every phase)
+- When documentation is unclear or contradictory, stop and ask the user
+- Use `@migration-orchestrator` to start, continue, skip, or check status
+
+**Key Features**: 
+1. **Orchestrator Pattern**: Single user-facing agent coordinates all work
+2. **Subagent Execution**: Specialized agents handle planning, execution, and validation
+3. **Automatic Rule Injection**: Core rules apply to all agents without redundant setup
+4. **Evidence-Driven**: All decisions backed by official documentation and task logs
 ---
 
 ## Quick Start
