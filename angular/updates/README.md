@@ -2,10 +2,95 @@
 
 AI-assisted Angular version migration for OneCX applications.
 
+!!! IMPORTANT
+    This is an expert tool given to devopers to provide extended support with the migration process. It is NOT a fully autonomous agent and requires developer oversight, especially for validation and decision-making.
+    - The expected migration work done by the agent is around 75% for generated apps and 50% for non-generated apps.
+    - This tool can perfom tasks such as code changes will the help of official documentation. As this agents use llm models so they are deterministic in nature.
+    -  The developer is expected to fix any style or css issues that may occur after the migration is complete. Which is execpected even if the developer doen't use this tool.   
+
+
+## Quick Start
+#### 1. Copy to your repo
+```bash
+cp -r .github/* /path/to/your/repo/.github/
+```
+Note: Restart or Reload Vscode current window to make sure agents are loaded
+
+#### 2. Customize (optional but recommended)
+Edit these files for your project if required:
+- `.github/instructions/migration-custom-user.instructions.md` — your project patterns
+- `.github/instructions/migration-18-19.instructions.md` — version-specific URLs/data
+
+#### 3. Start migration
+Start migration with the following commands in copilot chat
+```
+/migrate-19
+/migrate-20
+/migrate-21
+```
+
+#### 4. Execute tasks
+```
+@migration-orchestrator "Continue execution"
+```
+or 
+Select one of the handoff button provided
+Repeat until Phase A is complete. Then approve Phase B upgrade, then continue through Phase C.
+
 ---
 
 ## Architecture
 
+This workspace runs an AI-assisted Angular version migration for OneCX applications.
+
+- **MIGRATION_PROGRESS.md** is the single source of truth for all task state
+- All migration tasks are derived from official documentation — never invented
+- Orchestrator chains executor spawns (one task each) with smart stop conditions
+- Validation order is always: build → lint → test (every task, every phase)
+- When documentation is unclear or contradictory, stop and ask the user
+- Use `@migration-orchestrator` to start, continue, skip, or check status
+  
+```mermaid
+flowchart TB
+    Dev(["Developer"])
+
+    subgraph Agents["Agent Layer"]
+        Orch["Orchestrator<br/>Coordinates and routes work"]
+        Planner["Planner<br/>Creates the migration plan"]
+        Executor["Executor<br/>Applies code changes"]
+        Validator["Validator<br/>Verifies quality"]
+        Orch --> Planner
+        Orch --> Executor
+        Orch --> Validator
+    end
+
+    File[("MIGRATION_PROGRESS.md<br/>Shared State")]
+
+    Dev --> Orch
+    Planner -. "creates" ..-> File
+    Executor -. "updates / edits" ..-> File
+    Validator -. "reads" ..-> File
+    Orch -. "reads" ...-> File
+
+    subgraph Ext["External Tools"]
+        OneCX["OneCX Docs MCP"]
+        PrimeNG["PrimeNG MCP"]
+        NPM["NPM Sentinel MCP"]
+    end
+
+    Planner --> Ext
+    Executor --> Ext
+
+```
+
+#### Key Features: 
+1. **Orchestrator Pattern**: Single user-facing agent coordinates all work
+2. **Subagent Execution**: Specialized agents handle planning, execution, and validation
+3. **Automatic Rule Injection**: Core rules apply to all agents without redundant setup
+4. **Evidence-Driven**: All decisions backed by official documentation and task logs
+
+
+#### Repository structure:
 ```
 .github/
 ├── agents/
@@ -29,55 +114,11 @@ AI-assisted Angular version migration for OneCX applications.
     └── tasks.json                                     — VS Code tasks for build/lint/test
 ```
 
-This workspace runs an AI-assisted Angular version migration for OneCX applications.
-
-- **MIGRATION_PROGRESS.md** is the single source of truth for all task state
-- All migration tasks are derived from official documentation — never invented
-- Orchestrator chains executor spawns (one task each) with smart stop conditions
-- Validation order is always: build → lint → test (every task, every phase)
-- When documentation is unclear or contradictory, stop and ask the user
-- Use `@migration-orchestrator` to start, continue, skip, or check status
-
-**Key Features**: 
-1. **Orchestrator Pattern**: Single user-facing agent coordinates all work
-2. **Subagent Execution**: Specialized agents handle planning, execution, and validation
-3. **Automatic Rule Injection**: Core rules apply to all agents without redundant setup
-4. **Evidence-Driven**: All decisions backed by official documentation and task logs
----
-
-## Quick Start
-### 1. Copy to your repo
-```bash
-cp -r .github/* /path/to/your/repo/.github/
-```
-Note: Restart or Reload Vscode current window to make sure agents are loaded
-
-### 2. Customize (optional but recommended)
-Edit these files for your project if required:
-- `.github/instructions/migration-custom-user.instructions.md` — your project patterns
-- `.github/instructions/migration-18-19.instructions.md` — version-specific URLs/data
-
-### 3. Start migration
-Start migration with the following commands in copilot chat
-```
-/migrate-19
-/migrate-20
-/migrate-21
-```
-
-### 4. Execute tasks
-```
-@migration-orchestrator "Continue execution"
-```
-or 
-Select one of the handoff button provided
-Repeat until Phase A is complete. Then approve Phase B upgrade, then continue through Phase C.
-
 ---
 
 ## How It Works
 
-### Agent Roles
+#### Agent Roles
 
 | Agent | Role | Visible to User? | Tools |
 |-------|------|-------------------|-------|
@@ -86,7 +127,7 @@ Repeat until Phase A is complete. Then approve Phase B upgrade, then continue th
 | **Executor** | Execute ONE task per invocation with full evidence | No (subagent) | read, search, edit, execute, web |
 | **Validator** | Verify task completeness, run build/lint/test checks | No (subagent) | read, search, execute |
 
-### Workflow
+#### Workflow
 
 ```
 User: /migrate-19, /migrate-20, /migrate-21
@@ -107,7 +148,7 @@ User: /migrate-19, /migrate-20, /migrate-21
   └─ Phase gates enforced by Orchestrator at A→B and B→C transitions
 ```
 
-### Handoffs
+#### Handoffs
 After each action, the Orchestrator shows clickable buttons:
 - **Continue Execution** — execute next task
 - **Skip Tasks** — mark tasks not applicable
@@ -124,7 +165,7 @@ After each action, the Orchestrator shows clickable buttons:
 
 ---
 
-## Phases
+#### Phases
 
 | Phase | What Happens | Validation |
 |-------|-------------|------------|
@@ -132,5 +173,46 @@ After each action, the Orchestrator shows clickable buttons:
 | **Phase A** | Pre-upgrade code changes (imports, templates, configs) | npm build/lint/test after each task |
 | **Phase B** | Core package upgrades (Angular, Nx, PrimeNG) | Requires explicit developer approval gate |
 | **Phase C** | Post-upgrade cleanup and fixes | npm build/lint/test after each task |
+
+```mermaid
+flowchart TD
+    Start(["Developer runs\n/migrate-{version}"])
+    Done(["Migration Complete"])
+
+    subgraph P1["Phase 1 — Planning"]
+        direction TB
+        P1a["Check branch and dependencies"]
+        P1b["Run build, lint and tests"]
+        P1c["Detect current versions"]
+        P1d["Fetch migration docs & Create MIGRATION_PROGRESS.md"]
+        P1e["Write task list"]
+        P1a --> P1b --> P1c --> P1d --> P1e
+    end
+
+    subgraph PA["Phase A — Pre-Upgrade"]
+        PAa["Apply required code changes"]
+        PAb["Validate against current Angular"]
+        PAa --> PAb
+    end
+
+    subgraph PB["Phase B — Core Upgrade"]
+        PBa["Run core ng & angular update"]
+        PBb["Fix & Map transitional errors"]
+        PBa --> PBb
+    end
+
+    subgraph PC["Phase C — Post-Upgrade"]
+        PCa["Apply post-upgrade changes"]
+        PCb["PrimeNG migration"]
+        PCc["Error recovery"]
+        PCa --> PCb --> PCc
+    end
+
+    Start --> P1
+    P1 -->|"baseline gate"| PA
+    PA -->|"developer approves"| PB
+    PB -->|"developer confirmed"| PC
+    PC --> Done(["Migration Complete"])
+```
 
 ---

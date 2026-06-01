@@ -39,19 +39,6 @@ applyTo: '**'
 - Component replacement must be doc-driven: NEVER use hardcoded "never replace" lists — always fetch CURRENT docs and defer to what they say
 - If docs are silent or contradictory about replacing a component → stop and ask, do not guess based on memory or previous runs
 
-## Documentation Discovery
-- Fetch FULL content of every link on the migration index page
-- Count H2 headings per page — each becomes a separate task
-- Check for sub-links on each page and fetch those too
-- Verify after each page: tasks_created == h2_count (if mismatch, re-split)
-- Map tasks to any relevant instruction from the active data file (e.g. `migration-x-y.instructions.md`) 
-- For PrimeNG: if major version gap > 1, MANDATORY check each intermediate migration guide per hop
-  - Example: primeng@17 → primeng@19 requires checking v18 guide AND v19 guide
-  - **Use PrimeNG MCP tools FIRST** (e.g. `migrate_x_to_y`) — these are more reliable than URL fetching
-  - For intermediate version URLs, use the subdomain pattern: `https://primeng.org/migration/v{y}`(note: `https://primeng.org/migration/v{y}` may 404 for older versions so for version 18 and before use `https://v{y}.primeng.org/guides/migration` instead)
-  - Only fall back to URLs if MCP tools are unavailable or return no data
-  - If a fallback URL returns 404/not found, record it as "not found via URL" but DO NOT skip — try MCP tool or subdomain URL as alternative
-  - Record for each intermediate version: "vN guide: found/not-found (source: MCP/URL/subdomain)"
 
 ## Task Classification (Phase A vs Phase C)
 - The migration index page clearly separates "Migration Steps before upgrading" (Phase A) and "Migration Steps after upgrading" (Phase C)
@@ -61,6 +48,7 @@ applyTo: '**'
 - If the index page structure is ambiguous, fetch the full page and look for section headings like "before upgrading" / "after upgrading" to determine classification
 - **MANDATORY**: Create a separate task in Phase C (at the end) dedicated to `PrimeNG migration`, explicitly to implement PrimeNG breaking changes.
 - **MANDATORY**: Create a separate `Error Recovery Loop` task in Phase C (at the end) to resolve any build, lint, or test failures.
+
 
 ## Validation Rules
 - ALL phases (A, B, C): run `npm run build` → `npm run lint` → `npm run test` after every task. Phase A changes are made against the CURRENT Angular version — the build must pass.
@@ -74,7 +62,7 @@ applyTo: '**'
 - Lint must ALWAYS pass, even in Phase B and Phase C
 
 ## Phase Boundaries
-- Phase 1 → A: automatic after planning completes
+- Phase 1 → A: revert to orchestrator take developer input and review on `MIGRATION_PROGRESS.md` if provided after planning completes
 - Phase A → B: requires explicit developer approval (mandatory gate)
 - Phase B → C: requires developer confirmation after stable build/test
 - Phase 1 (planner) never executes code changes — discovery and planning only
@@ -120,7 +108,7 @@ applyTo: '**'
 - Post-migration (Phase C) changes may cause transitional failures — record the error and check if a later Phase C task resolves it
 
 ## CSS and File Scope
-- NEVER modify files in other repositories (e.g. shell-ui, workspace-ui) to fix issues in YOUR application
+- NEVER modify files in other repositories (e.g. shell-ui, workspace-ui) or node_modules to fix issues in YOUR application
 - CSS fixes must be in YOUR application's component styles or global styles — not in library files or other microfrontends
 - If a CSS issue seems to require library changes, document it and escalate to the developer
 

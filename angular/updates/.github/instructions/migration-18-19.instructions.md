@@ -84,7 +84,7 @@ description: Version-specific migration URLs, version mappings, known issues, an
 ## Special Migration Rules (Angular 18 → 19 Specific)
 These rules apply specifically to the Angular 18 → 19 migration path:
 - **Styles handling**: Apply styles.scss changes exactly as documented. If conflict between Nx styles array and Sass @import → STOP and ask which pattern to use
-- **Standalone components**: If error "Component is standalone, and cannot be declared in an NgModule" → add `standalone: false` and document why
+- **Standalone components**: If error "Component is standalone, and cannot be declared in an NgModule" → add `standalone: false` and make sure the Component is declared in NgModule and document why
 - **Angular version caret**: MUST keep caret (`^`) in package.json for `@angular/*` packages — module federation requires compatible version ranges for sharing
 - **package-lock.json**: Delete and regenerate with `npm install` at major transition points (after Phase A packages, after Phase C packages) — prevents stale lock file conflicts
 
@@ -92,20 +92,13 @@ These rules apply specifically to the Angular 18 → 19 migration path:
 These rules MUST be followed when determining whether a task applies. The docs describe WHAT to do — these rules tell you HOW to check applicability. For EVERY task, independently search the ENTIRE codebase for ALL patterns listed below.
 
 
-### Adjust Standalone Mode
-- `<ocx-portal-viewport>` is **NOT** provided by `@onecx/standalone-shell`.  
-  It originates from a different library and is **removed in v6**.
-- The **only valid replacement** for `<ocx-portal-viewport>` is  
-  `<ocx-standalone-shell-viewport>` from `@onecx/angular-standalone-shell`.
+### Adjust Standalone Mode - Phase C Task
+- `<ocx-portal-viewport>` is **NOT** provided by `@onecx/standalone-shell`.It originates from a different library and is **removed in v6**.
+- The **only valid replacement** for `<ocx-portal-viewport>` is `<ocx-standalone-shell-viewport>` from `@onecx/angular-standalone-shell`.
 - **Applicability rule**:
   - Search **ALL** `.html` files for `<ocx-portal-viewport>`.
   - If found → **this task applies**, regardless of whether `@onecx/standalone-shell` exists in `package.json`.
 - **DO NOT** skip this task simply because `@onecx/standalone-shell` is absent from `package.json`.
-- **Known incompatibility / phase rule**:
-  - `@onecx/angular-standalone-shell` has **no v5‑compatible version**.
-  - First stable release is **v6+**, requiring `@angular/core: ^19.0.0`.
-  - If the migration guide does **not** explicitly assign a phase, the executor **MUST** check peer dependencies per the **No‑Defer Rule**.
-  - This condition **forces reclassification to Phase C**.
 
 ### Update Component Imports
 - Strictly follow the source documentation for any component, service, or directive import changes.
@@ -113,40 +106,27 @@ These rules MUST be followed when determining whether a task applies. The docs d
 - If **ANY** import from a section is found → **apply the entire section**.
 - Evaluate each section **independently**; one section being N/A does **NOT** exempt others.
 
-### Remove MenuService
-- Search all `.ts` files for `MenuService` imports from `@onecx/portal-integration-angular`.
-- Remove both **imports** and any **constructor or property references**.
 
 ### Provide ThemeConfig
 - Applies **ONLY** if `primeng` is listed as a dependency in `package.json`.
-- Add `provideThemeConfig()` from `@onecx/angular-accelerator` to the **providers** array.
-- If applicable, apply this change to **ALL** `@NgModule` files **AND** all `bootstrapRemoteComponent` files.
+- Add `provideThemeConfig()` from `@onecx/angular-accelerator` to the **providers** array. If applicable, apply this change to **ALL** `@NgModule` files **AND** all `bootstrapRemoteComponent` files.
 
 ### Replace BASE_URL
-- Search all `.ts` files for:
-  - `BASE_URL` imports from `@onecx/angular-remote-components`
-  - `bootstrapRemoteComponent(` usage
-- Apply the replacement wherever found.
+- Search all `.ts` files for: `BASE_URL` imports from `@onecx/angular-remote-components` with `import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from "@onecx/angular-utils"`
 
 ### Remove `@onecx/portal-layout-styles`
-- For the **Expose styles.css** task:
-  - If `nx.json` or `workspace.json` exists → treat as **Nx workspace**
-  - Otherwise → treat as **Angular CLI**
+- For the **Expose styles.css** task: If `nx.json` or `workspace.json` exists → treat as **Nx workspace**. Otherwise → treat as **Angular CLI**
 - Apply the configuration approach that matches the workspace type.
 
 ### Update Theme Service
 - Documentation instructs to remove `ThemeService.apply()` calls and also provides a custom `apply()` implementation.
-- This is **NOT** contradictory:
-  - Remove all `ThemeService.apply()` calls.
-  - **ONLY IF** temporary theme previews are required, implement the provided custom `apply()` function as a replacement.
-
+- This is **NOT** contradictory: Remove all `ThemeService.apply()` calls. **ONLY IF** temporary theme previews are required, implement the provided custom `apply()` function as a replacement.
 
 ### Update Translations
 - Check the official OneCX documentation for translation‑related changes and replacements.
+- The `provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')` and `provideTranslationConnectionService()` are present in providers of all module and remote.module files.
 - For each example pattern shown in the docs, search the codebase, analyze usage, and apply the required replacement.
-- **Remove `translateServiceInitializer`** from providers and replace it with:
-  `provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')`
-  from `@onecx/angular-utils` (**MANDATORY**).
+- **Remove `translateServiceInitializer`** from providers and replace it with: `provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')` from `@onecx/angular-utils` (**MANDATORY**).
 - Remove the following provider configuration wherever it exists:
 ```ts
 {
@@ -161,20 +141,11 @@ These rules MUST be followed when determining whether a task applies. The docs d
 - If `REMOTE_COMPONENT_CONFIG` provider exists in both `bootstrap.ts` and `component.ts`, keep it ONLY in `bootstrap.ts`. Remove from `component.ts` to avoid duplication.
 
 ### Post‑Migration Import Corrections
-- Strictly follow the source documentation for any component, service, or directive import changes.
-- **MANDATORY**: Add to providers:
-  - `provideAnimations()` from `@angular/platform-browser/animations`
-  - `provideAngularUtils()` from `@onecx/angular-utils`
-  - `provideTranslationConnectionService()` from `@onecx/angular-utils`
-- **REQUIRED**: Remove **all** imports from:
-  - `@onecx/portal-integration-angular`
-  - `@onecx/onecx/portal-layout-styles`
 - Update component, service, and directive imports accordingly.
 - If errors occur, search **only** within `node_modules/@onecx`.
 - Follow official OneCX documentation for replacements.
 - **STRICT**:
-  - `<ocx-data-loading-error>` is **deprecated with NO replacement**.
-  - **DO NOT replace it** with `<ocx-error>` or any other component.
+  - `<ocx-data-loading-error>` is **deprecated with NO replacement**. DO NOT replace it with `<ocx-error>` or any other component.
 - After v6 upgrade (`@onecx/portal-integration-angular` removed):
   - `AppStateService`, `ConfigurationService`, `UserService`,
     `PortalMessageService`, `APP_CONFIG`, `CONFIG_KEY`
@@ -192,7 +163,7 @@ These rules MUST be followed when determining whether a task applies. The docs d
 
 ## PrimeNG‑Specific Migration Instructions (v17 → v19)
 These are **instructions**, not an exhaustive list.  
-Items below are **examples only** to illustrate common changes and must **not** be treated as complete or authoritative.
+Items below are **examples only** to illustrate common changes and must **not** be treated as complete changes make sure you fetch and also include changes if missed.
 - Fetch https://v18.primeng.org/guides/migration and extract **v17 → v18** breaking and component changes.
 - Query PrimeNG MCP tool `migrate_v18_to_v19` to detect component‑specific API and breaking changes.
 - For any PrimeNG‑related errors:
@@ -212,16 +183,31 @@ Examples of known PrimeNG breaking changes (NOT complete — always check additi
   - `TriStateCheckbox`, `DataViewLayoutOptions`, `PrimeNGConfig` → removed
   - `pAnimate` directive → removed, use `pAnimateOnScroll`
   - `Message` interface → renamed to `ToastMessageOptions` in `ToastService`
-  - Replace all `<span class="p-float-label">...</span>` with `<p-floatlabel variant="on">...</p-floatlabel>`.
 - **Styling changes**, e.g.:
   - `.p-fluid` class removed → use `fluid` input on components
   - `.p-highlight` class renamed → update custom styles
 - **Compatibility**, e.g.:
   - PrimeFlex 3.x is not compatible with PrimeNG 19 → upgrade to PrimeFlex 4.x
+- **Css Import changes**:
+  - Old: 
+        ```scss
+        @import 'node_modules/primeng/resources/primeng.min.css';
+        @import 'node_modules/primeicons/primeicons.css';
+        @import 'node_modules/primeflex/primeflex.scss';
+        ```
+  - New:
+        ```scss
+        @import 'primeicons/primeicons.css';
+        @import 'primeflex/primeflex.scss';
+        ```
 - **Module / API changes**, e.g.:
   - `InputTextareaModule` → `TextareaModule`
   - `p-checkbox [label]` removed → use a separate `<label>` element
-  - Verify whether modules such as `CheckboxModule`, `ButtonModule`, `MessageModule`, `BadgeModule`, `SelectModule`, `FloatLabelModule`, and similar modules are required; if so, add them to shared module imports/exports (application‑specific).
+  - Migrate p-float-label class span  `<span class="p-float-label">...</span>` with `<p-floatlabel variant="on">...</p-floatlabel>`.
+  - Migrate custom filterbox addons eg: `<span class="addon"></span>` to `<p-inputgroup><p-inputgroup-addon></p-inputgroup-addon></p-inputgroup>`.
+  - Migrate custom badges to `p-badge` component.
+  - Migrate `card selectors` with `p-card`.
+  - Verify whether modules such as `CheckboxModule`, `ButtonModule`, `MessageModule`, `BadgeModule`, `SelectModule`, `FloatLabelModule`,`TooltipModule` and similar modules are required; if so, add them to shared module imports/exports (application‑specific).
 
 ## Nx / Angular Changes (18 → 19)
 - Angular 19 requires **TypeScript >= ~5.7.x**.
@@ -236,6 +222,17 @@ Examples of known PrimeNG breaking changes (NOT complete — always check additi
 - **Angular CLI projects**:
   - Do NOT run Nx migrate commands.
   - Upgrade Angular and dependencies via documented Angular steps only.
+
+## Final Changes Verification and Validation
+- Strictly follow the source documentation for any component, service, or directive import changes.
+- **MANDATORY**: Add to providers:
+  - `provideAnimations()` from `@angular/platform-browser/animations`
+  - `provideAngularUtils()` from `@onecx/angular-utils`
+  - `provideTranslationConnectionService()` from `@onecx/angular-utils`
+- Verify ``
+- **REQUIRED**: Remove **all** imports from:
+  - `@onecx/portal-integration-angular`
+  - `@onecx/onecx/portal-layout-styles`
 
 ## Determine Stable Release (^5 vs ^6 Handling)
 When documentation specifies a version range, **resolve to the latest STABLE release only**.

@@ -198,7 +198,8 @@ Active Data File:
 > Run AFTER all Phase C tasks are marked [x].
 > Purpose: Verify that errors recorded during Phase C are now resolved.
 
-- [ ] Read and check the Active Data if anything is missed 
+- [ ] Strictly Read and check the `migration-x-y.instructions.md` if anything is missed 
+- [ ] Verify the `Final Verification and Validation` task in `migration-x-y.instructions.md` is compled
 - [ ] Rerun: npm run build (should now pass)
 - [ ] Rerun: npm run lint (must pass — 0 errors, vs baseline warnings)
 - [ ] Rerun: npm run test (should pass, coverage at or above baseline)

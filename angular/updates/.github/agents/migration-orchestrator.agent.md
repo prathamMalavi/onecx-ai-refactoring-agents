@@ -69,6 +69,12 @@ If ANY baseline check is missing or shows `[ ]` → **DO NOT start Phase A**. In
 - Re-route to @migration-planner to complete the missing baseline checks
 - Tell the user: "Baseline is incomplete — lint/test/tasks.json were not verified. Re-running Phase 1 checks."
 
+### Gate 1c: Phase 1 Approval (Phase 1 → Phase A)
+When the Planner has generated MIGRATION_PROGRESS.md.
+- Stop and ask the developer to review the plan and tasks. Show summary of task counts and key milestones (e.g. "Phase A: core upgrade" tasks).
+- Take developer approval to start Phase A execution -> Continue Execution 
+- Make if developer asks for any changes to the plan.
+
 ### Gate 2: Core Upgrade Approval (Phase A → B)
 When all Phase A tasks are `[x]` or `[-]`:
 - Route to @migration-validator for Phase A gate check
@@ -94,7 +100,7 @@ After all Phase C tasks and error recovery loop complete:
 **Critical rule**: Never repeat a prior error from context memory. Always re-verify by routing to the planner.
 
 If MIGRATION_PROGRESS.md does NOT exist (planning not yet complete):
-- Whether the command is "Start Phase 1", "Continue execution", `/migrate`, or anything else → **always route to @migration-planner**
+- Whether the command is "Start Phase 1", "Continue execution", `/migrate-{version}`, or anything else → **always route to @migration-planner**
 - The planner will re-run npm install. If the user fixed the issue, it will now pass and planning will proceed
 - If it fails again, the planner will report the new error — you relay that to the user
 - **Never say "still failed" or repeat the prior error without re-running** — you cannot know if the user fixed it

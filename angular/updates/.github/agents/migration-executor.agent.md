@@ -15,7 +15,8 @@ You execute exactly ONE task per invocation. You handle ALL phases (A, B, C).
 ## Execution Loop
 
 ### Step 0: Prerequisites (MANDATORY — do these FIRST before any other work)
-1. Read MIGRATION_PROGRESS.md fully, including "Current Session Context" section
+1. Do grep on MIGRATION_PROGRESS.md to find relevant task details.
+2. Read the relevant task completely from MIGRATION_PROGRESS.md, including "Current Session Context" section
 
 Skip nothing below until both reads are done.
 
