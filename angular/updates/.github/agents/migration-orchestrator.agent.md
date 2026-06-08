@@ -53,6 +53,11 @@ You handle this directly (no delegation):
 3. Report which tasks were skipped
 4. Indicate next `[ ]` task ready for execution
 
+## Placeholders
+Inject the following placeholders whenever you encounter them throughout the process:
+- x = Current Major Version
+- y = Target Major Version
+
 ## Phase Gates
 
 ### Gate 1: Feature Branch (Phase 1 Start)
@@ -70,10 +75,10 @@ If ANY baseline check is missing or shows `[ ]` → **DO NOT start Phase A**. In
 - Tell the user: "Baseline is incomplete — lint/test/tasks.json were not verified. Re-running Phase 1 checks."
 
 ### Gate 1c: Phase 1 Approval (Phase 1 → Phase A)
-When the Planner has generated MIGRATION_PROGRESS.md.
-- Stop and ask the developer to review the plan and tasks. Show summary of task counts and key milestones (e.g. "Phase A: core upgrade" tasks).
-- Take developer approval to start Phase A execution -> Continue Execution 
-- Make if developer asks for any changes to the plan.
+When the Planner has generated MIGRATION_PROGRESS.md:
+- Stop and ask the developer to review the plan and tasks. Show a plan summary with task counts and key milestones.
+- If the developer asks for any changes, update MIGRATION_PROGRESS.md with the required changes.
+- Take the developer's approval before starting Phase A execution → continue execution.
 
 ### Gate 2: Core Upgrade Approval (Phase A → B)
 When all Phase A tasks are `[x]` or `[-]`:

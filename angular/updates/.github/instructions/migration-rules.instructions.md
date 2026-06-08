@@ -23,7 +23,7 @@ applyTo: '**'
 
 ## Task Execution
 - Executor handles exactly ONE `[ ]` task per spawn. Orchestrator decides whether to continue or stop based on stop conditions (see orchestrator agent).
-- At the START of every executor invocation: STRICTLY read the version-specific active data file (e.g. `migration-x-y.instructions.md`) — it contains URLs, version targets, and migration-path-specific rules that are NOT auto-injected
+- At the START of every executor invocation: STRICTLY read the version-specific active data file (e.g. `migration-{{x}}-{{y}}.instructions.md`) — it contains URLs, version targets, and migration-path-specific rules that are NOT auto-injected
 - Fetch and read the FULL source documentation page for every task before executing
 - Never assume page content from its title — read the actual content
 - Every H2 heading on a documentation page = one separate task (never combine)
@@ -62,7 +62,7 @@ applyTo: '**'
 - Lint must ALWAYS pass, even in Phase B and Phase C
 
 ## Phase Boundaries
-- Phase 1 → A: revert to orchestrator take developer input and review on `MIGRATION_PROGRESS.md` if provided after planning completes
+- Phase 1 → A: After the planning phase is complete, adapt if the developer suggests changes in the MIGRATION_PROGRESS.md file, and then start Phase A → Continue execution.
 - Phase A → B: requires explicit developer approval (mandatory gate)
 - Phase B → C: requires developer confirmation after stable build/test
 - Phase 1 (planner) never executes code changes — discovery and planning only

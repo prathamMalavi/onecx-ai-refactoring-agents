@@ -5,7 +5,7 @@ AI-assisted Angular version migration for OneCX applications.
 !!! IMPORTANT
     This is an expert tool given to devopers to provide extended support with the migration process. It is NOT a fully autonomous agent and requires developer oversight, especially for validation and decision-making.
     - The expected migration work done by the agent is around 75% for generated apps and 50% for non-generated apps.
-    - This tool can perfom tasks such as code changes will the help of official documentation. As this agents use llm models so they are deterministic in nature.
+    - This tool can perfom tasks such as code changes with the help of official documentation.
     -  The developer is expected to fix any style or css issues that may occur after the migration is complete. Which is execpected even if the developer doen't use this tool.   
 
 
@@ -22,7 +22,7 @@ Edit these files for your project if required:
 - `.github/instructions/migration-18-19.instructions.md` — version-specific URLs/data
 
 #### 3. Start migration
-Start migration with the following commands in copilot chat
+Start migration with the following commands in copilot chat (depending on your version)
 ```
 /migrate-19
 /migrate-20

@@ -1,8 +1,7 @@
 ---
 name: migration-planner
 description: >
-  Discover and plan OneCX Angular migration. Visits every doc page,
-  extracts H2 sections as tasks, creates MIGRATION_PROGRESS.md.
+  Discover and plan OneCX Angular migration. visit every doc page, extract H2 sections as tasks, create MIGRATION_PROGRESS.md.
 argument-hint: "First-time planning to create MIGRATION_PROGRESS.md"
 user-invocable: false
 tools: ['agent', 'read', 'search', 'execute', 'web', 'edit', 'vscode', 'todo', 'browser', 'onecx-docs-mcp/*', 'primeng/*', 'npm-sentinel/*', 'search/changes', 'search/codebase', 'search/fileSearch', 'search/usages', 'search/listDirectory' , 'search/searchResults', 'search/textSearch']
@@ -11,7 +10,7 @@ tools: ['agent', 'read', 'search', 'execute', 'web', 'edit', 'vscode', 'todo', '
 # Migration Planner
 
 You run ONCE to create the migration plan. You do NOT execute migration tasks or modify source code.
-STRICTLY follow the steps instructions as given below. Make sure to read the step instructions before each step's execution.
+STRICTLY follow the step instructions as given below. Make sure to read the step instructions before each step's execution.
 
 ## Pre-Check
 
@@ -92,20 +91,21 @@ If skipped: note "Vulnerability scan skipped (optional — run manually if neede
   - Record: "Verified .vscode/tasks.json — all 3 tasks present"
 - Check `copilot-instructions.md` (if exists): tag Angular-specific lines with `# [REMOVE-AFTER-MIGRATION]`
 
-## Step 4: Documentation Discovery
 
-Before starting,Strictly read the `migration-rules.instructions.md`, `migration-x-y.instructions.md` and `migration-custom.instructions.md` to understand the rules of how to discover and create tasks. This is critical to ensure you create the correct tasks in the correct format.
+## Step 4: Documentation Discovery
+<!-- I assume migration-x-y.instructions.md points to some version specific file. Can you make it clearer that x and y are placeholders here? -->
+Before starting, strictly read the `migration-rules.instructions.md`, `migration-{{x}}-{{y}}.instructions.md`, and `migration-custom.instructions.md` to understand the rules of how to discover and create tasks. This is critical to ensure you create the correct tasks in the correct format.
 Fetch the OneCX migration index page for the target version:
-- Fetch Source Url and FULL Page content of every link/task/subtask on the migration index page
+- Fetch Source URL and full page content of every link/task/subtask on the migration index page
 - Count H2 headings per page — each becomes a separate task
-- Check for sub-links/subTasks on each page and fetch those too, Verify after each page: tasks_created == h2_count (if mismatch, re-split)
-- Strictly map tasks to any relevant instruction from the active data file (e.g. `migration-x-y.instructions.md`) if there are any.
+- Check for sub-links/subtasks on each page and fetch those too. Verify after each page: tasks_created == h2_count (if mismatch, re-split)
+- Strictly map tasks to any relevant instruction from the active data file (e.g., `migration-{{x}}-{{y}}.instructions.md`) if there are any.
 - For PrimeNG (if used): fetch migration guide — MANDATORY check each intermediate version if major gap > 1
-  - **Use PrimeNG MCP tools FIRST** (e.g. `migrate_v{x}_to_v{y}`) — these are more reliable than URL fetching
+  - **Use PrimeNG MCP tools FIRST** (e.g., `migrate_v{x}_to_v{y}`) — these are more reliable than URL fetching
   - Only fall back to intermediate guide URLs if MCP tools are unavailable or return no data
-  - If a fallback URL returns 404/not found, record it as "not found via URL" but DO NOT skip — try MCP tool as alternative and check the subdomain URL if applicable (eg. `https://v{y}.primeng.org/guides/migration` or `https://primeng.org/migration/v{y}`)
+  - If a fallback URL returns 404/not found, record it as "not found via URL" but DO NOT skip — try MCP tool as an alternative and check the subdomain URL if applicable (e.g., `https://v{y}.primeng.org/guides/migration` or `https://primeng.org/migration/v{y}`)
   - Pattern: check each major version hop between current and target
-  - Record which guides were found/not-found and source (MCP vs URL) for each
+  - Record which guides were found/not found and the source (MCP vs URL) for each
 - For Nx (if present): fetch Nx migration guide
   - If Nx version gap spans multiple majors, check step-by-step paths
 - Check for sub-links on each page and fetch those too
@@ -122,7 +122,7 @@ If ANY row shows mismatch → FIX before proceeding to next page.
 
 ## Step 5: Build Task Tree
 
-- STRICTLY Independent task per H2 heading (never combine H2s as subtask into one task) and mention source URL for each.
+- STRICTLY independent task per H2 heading (never combine H2s as subtasks into one task) and mention source URL for each.
 - Mention source URL for each task in MIGRATION_PROGRESS.md
 - Classify using the index page structure:
   - Tasks under "Migration Steps **before** upgrading" → Phase A ONLY
@@ -131,17 +131,17 @@ If ANY row shows mismatch → FIX before proceeding to next page.
 - Phase A tasks = code changes ONLY — never include package version upgrades (those are Phase B)
 - Last Phase A task = "End-of-Phase-A Build State Record" (STRICT — build/lint/test must pass)
 - Check applicability of each task against repo (grep for relevant imports/packages)
-- STRICTLY create independent task in Phase C for PRIMENG migrations if primeng is used aslo include `PrimeNG‑Specific Migration Instructions` from `migration-x-y.instructions.md`. 
-- Create x tasks in Phase C if their are x number or jumps in version for eg.Primng 17 to 19 = 2 jumps so 2 independent tasks: 17-18 and 18-19. 
-- STRICTLY create independent task in Phase C for `Final Verification and Validation` from `migration-x-y.instructions.md`
-- STRICTLY create Error Recovery Loop task in end of Phase C
-- Record source URL for every task
+- STRICTLY create independent tasks in Phase C for PrimeNG migrations if PrimeNG is used. Also include `PrimeNG‑Specific Migration Instructions` from `migration-{{x}}-{{y}}.instructions.md`.
+- Create x tasks in Phase C if there are x number of jumps in versions. For example, PrimeNG 17 to 19 = 2 jumps, so 2 independent tasks: 17-18 and 18-19.
+- STRICTLY create an independent task in Phase C for `Final Verification and Validation` from `migration-{{x}}-{{y}}.instructions.md`.
+- STRICTLY create an Error Recovery Loop task at the end of Phase C.
+- Record the source URL for every task.
 - Ensure contiguous numbering: A.1, A.2, ... and C.1, C.2, ...
 
 ## Step 6: Create MIGRATION_PROGRESS.md
 
-Strictly Use template from [MIGRATION_PROGRESS.template.md](../templates/MIGRATION_PROGRESS.template.md).
-Strictly mention Active Data File reference at the top (e.g. `migration-x-y.instructions.md`). 
+Strictly use the template from [MIGRATION_PROGRESS.template.md](../templates/MIGRATION_PROGRESS.template.md).
+Strictly mention the Active Data File reference at the top (e.g., `migration-{{x}}-{{y}}.instructions.md`).
 Populate Phase 1 audit results and all discovered tasks with `[ ]` markers.
 
 ## Step 7: Ensure .vscode/tasks.json Exists (FINAL CHECK)

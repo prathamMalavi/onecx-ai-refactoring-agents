@@ -84,7 +84,7 @@ description: Version-specific migration URLs, version mappings, known issues, an
 ## Special Migration Rules (Angular 18 → 19 Specific)
 These rules apply specifically to the Angular 18 → 19 migration path:
 - **Styles handling**: Apply styles.scss changes exactly as documented. If conflict between Nx styles array and Sass @import → STOP and ask which pattern to use
-- **Standalone components**: If error "Component is standalone, and cannot be declared in an NgModule" → add `standalone: false` and make sure the Component is declared in NgModule and document why
+- **Standalone components**: If the error "Component is standalone, and cannot be declared in an NgModule" occurs → add `standalone: false`, ensure the component is declared in the NgModule, and document why
 - **Angular version caret**: MUST keep caret (`^`) in package.json for `@angular/*` packages — module federation requires compatible version ranges for sharing
 - **package-lock.json**: Delete and regenerate with `npm install` at major transition points (after Phase A packages, after Phase C packages) — prevents stale lock file conflicts
 
@@ -92,8 +92,9 @@ These rules apply specifically to the Angular 18 → 19 migration path:
 These rules MUST be followed when determining whether a task applies. The docs describe WHAT to do — these rules tell you HOW to check applicability. For EVERY task, independently search the ENTIRE codebase for ALL patterns listed below.
 
 
+
 ### Adjust Standalone Mode - Phase C Task
-- `<ocx-portal-viewport>` is **NOT** provided by `@onecx/standalone-shell`.It originates from a different library and is **removed in v6**.
+- `<ocx-portal-viewport>` is **NOT** provided by `@onecx/standalone-shell`. It originates from a different library and is **removed in v6**.
 - The **only valid replacement** for `<ocx-portal-viewport>` is `<ocx-standalone-shell-viewport>` from `@onecx/angular-standalone-shell`.
 - **Applicability rule**:
   - Search **ALL** `.html` files for `<ocx-portal-viewport>`.
@@ -112,10 +113,10 @@ These rules MUST be followed when determining whether a task applies. The docs d
 - Add `provideThemeConfig()` from `@onecx/angular-accelerator` to the **providers** array. If applicable, apply this change to **ALL** `@NgModule` files **AND** all `bootstrapRemoteComponent` files.
 
 ### Replace BASE_URL
-- Search all `.ts` files for: `BASE_URL` imports from `@onecx/angular-remote-components` with `import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from "@onecx/angular-utils"`
+- Search all `.ts` files for `BASE_URL` imports from `@onecx/angular-remote-components` and replace them with `import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from "@onecx/angular-utils"`
 
 ### Remove `@onecx/portal-layout-styles`
-- For the **Expose styles.css** task: If `nx.json` or `workspace.json` exists → treat as **Nx workspace**. Otherwise → treat as **Angular CLI**
+- For the **Expose styles.css** task: If `nx.json` or `workspace.json` exists → treat it as an **Nx workspace**. Otherwise → treat it as an **Angular CLI** project.
 - Apply the configuration approach that matches the workspace type.
 
 ### Update Theme Service
@@ -124,10 +125,11 @@ These rules MUST be followed when determining whether a task applies. The docs d
 
 ### Update Translations
 - Check the official OneCX documentation for translation‑related changes and replacements.
-- The `provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')` and `provideTranslationConnectionService()` are present in providers of all module and remote.module files.
+- `provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')` and `provideTranslationConnectionService()` are present in the providers of all module and remote.module files.
 - For each example pattern shown in the docs, search the codebase, analyze usage, and apply the required replacement.
-- **Remove `translateServiceInitializer`** from providers and replace it with: `provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')` from `@onecx/angular-utils` (**MANDATORY**).
+- **Remove `translateServiceInitializer`** from providers and replace it with `provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')` from `@onecx/angular-utils` (**MANDATORY**).
 - Remove the following provider configuration wherever it exists:
+
 ```ts
 {
   provide: APP_INITIALIZER,
@@ -163,7 +165,7 @@ These rules MUST be followed when determining whether a task applies. The docs d
 
 ## PrimeNG‑Specific Migration Instructions (v17 → v19)
 These are **instructions**, not an exhaustive list.  
-Items below are **examples only** to illustrate common changes and must **not** be treated as complete changes make sure you fetch and also include changes if missed.
+Items below are **examples only** to illustrate common changes and must **not** be treated as complete changes. Make sure you fetch and also include any changes if missed.
 - Fetch https://v18.primeng.org/guides/migration and extract **v17 → v18** breaking and component changes.
 - Query PrimeNG MCP tool `migrate_v18_to_v19` to detect component‑specific API and breaking changes.
 - For any PrimeNG‑related errors:

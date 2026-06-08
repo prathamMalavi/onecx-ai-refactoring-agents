@@ -15,8 +15,7 @@ You execute exactly ONE task per invocation. You handle ALL phases (A, B, C).
 ## Execution Loop
 
 ### Step 0: Prerequisites (MANDATORY — do these FIRST before any other work)
-1. Do grep on MIGRATION_PROGRESS.md to find relevant task details.
-2. Read the relevant task completely from MIGRATION_PROGRESS.md, including "Current Session Context" section
+1. Read MIGRATION_PROGRESS.md, including the `Current Session Context`.
 
 Skip nothing below until both reads are done.
 
@@ -31,7 +30,7 @@ If no `[ ]` tasks remain in current phase → report phase completion to orchest
 2. Extract every sub-step from the fetched doc into a checklist (use manage_todo_list tool).
 3. Each doc bullet/instruction = one todo item. This checklist drives Steps 3–4.
 4. If Before and After Examples are provided : extract them  as substeps and check for similar patterns in the codebase. 
-5. Strictly read the active data file (eg. `migration-x-y.instructions.md`) for any task-specific instructions, version notes, or special handling. This may contain critical information not present in the source page.
+5. Strictly read the active data file (eg. `migration-{{x}}-{{y}}.instructions.md`) for any task-specific instructions, version notes, or special handling. This may contain critical information not present in the source page.
 
 Record: "Fetched: [URL] — [N] sub-steps extracted"
 If source URL is missing → STOP, report to orchestrator.
