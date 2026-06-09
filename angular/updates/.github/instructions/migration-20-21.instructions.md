@@ -79,7 +79,6 @@ description: Version-specific URLs, version mappings, and known issues for Angul
 ## Special Migration Rules (Angular 20 → 21 Specific)
 These rules apply specifically to the Angular 20 → 21 migration path:
 - **Styles handling**: Apply styles.scss changes exactly as documented. If conflict between Nx styles array and Sass @import → STOP and ask which pattern to use
-- **Standalone components**: If error "Component is standalone, and cannot be declared in an NgModule" → add `standalone: false` and document why
 - **Angular version caret**: MUST keep caret (`^`) in package.json for `@angular/*` packages — module federation requires compatible version ranges for sharing
 - **package-lock.json**: Delete and regenerate with `npm install` at major transition points (after Phase A packages, after Phase C packages) — prevents stale lock file conflicts
 
@@ -127,7 +126,7 @@ When documentation specifies a version range, **resolve to the latest STABLE rel
 - If a stable release cannot be confirmed → **SKIP the package** (keep current; do not break the build).
 
 ## Common Real‑World Patterns
-These patterns were observed in real OneCX Angular 19 → 20 migrations:
+These patterns were observed in real OneCX Angular 20 → 21 migrations:
 - If any of the patterns below are found in the codebase, they **MUST be applied**.
 - **Detection of a pattern makes it compulsory**, regardless of whether the migration guide explicitly calls it out.
 ```text

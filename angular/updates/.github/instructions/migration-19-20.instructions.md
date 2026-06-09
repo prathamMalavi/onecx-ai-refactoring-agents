@@ -79,7 +79,6 @@ description: Version-specific URLs, version mappings, and known issues for Angul
 ## Special Migration Rules (Angular 19 → 20 Specific)
 These rules apply specifically to the Angular 19 → 20 migration path:
 - **Styles handling**: Apply styles.scss changes exactly as documented. If conflict between Nx styles array and Sass @import → STOP and ask which pattern to use
-- **Standalone components**: If error "Component is standalone, and cannot be declared in an NgModule" → add `standalone: false` and document why
 - **Angular version caret**: MUST keep caret (`^`) in package.json for `@angular/*` packages — module federation requires compatible version ranges for sharing
 - **package-lock.json**: Delete and regenerate with `npm install` at major transition points (after Phase A packages, after Phase C packages) — prevents stale lock file conflicts
 

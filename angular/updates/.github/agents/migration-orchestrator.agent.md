@@ -53,6 +53,11 @@ You handle this directly (no delegation):
 3. Report which tasks were skipped
 4. Indicate next `[ ]` task ready for execution
 
+## Placeholders
+Inject the following placeholders whenever you encounter them throughout the process:
+- x = Current Major Version
+- y = Target Major Version
+
 ## Phase Gates
 
 ### Gate 1: Feature Branch (Phase 1 Start)
@@ -68,6 +73,12 @@ Check current git branch. If main/master/develop → stop, ask user to create fe
 If ANY baseline check is missing or shows `[ ]` → **DO NOT start Phase A**. Instead:
 - Re-route to @migration-planner to complete the missing baseline checks
 - Tell the user: "Baseline is incomplete — lint/test/tasks.json were not verified. Re-running Phase 1 checks."
+
+### Gate 1c: Phase 1 Approval (Phase 1 → Phase A)
+When the Planner has generated MIGRATION_PROGRESS.md:
+- Stop and ask the developer to review the plan and tasks. Show a plan summary with task counts and key milestones.
+- If the developer asks for any changes, update MIGRATION_PROGRESS.md with the required changes.
+- Take the developer's approval before starting Phase A execution → continue execution.
 
 ### Gate 2: Core Upgrade Approval (Phase A → B)
 When all Phase A tasks are `[x]` or `[-]`:
@@ -94,7 +105,7 @@ After all Phase C tasks and error recovery loop complete:
 **Critical rule**: Never repeat a prior error from context memory. Always re-verify by routing to the planner.
 
 If MIGRATION_PROGRESS.md does NOT exist (planning not yet complete):
-- Whether the command is "Start Phase 1", "Continue execution", `/migrate`, or anything else → **always route to @migration-planner**
+- Whether the command is "Start Phase 1", "Continue execution", `/migrate-{version}`, or anything else → **always route to @migration-planner**
 - The planner will re-run npm install. If the user fixed the issue, it will now pass and planning will proceed
 - If it fails again, the planner will report the new error — you relay that to the user
 - **Never say "still failed" or repeat the prior error without re-running** — you cannot know if the user fixed it
